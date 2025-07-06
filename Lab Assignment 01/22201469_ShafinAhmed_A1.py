@@ -79,6 +79,23 @@ def run_part1(filename):
 
 #Part 02
 
+
+
+def check_admissibility(v,e,initial,goal,heuristics,edges):
+    graph={}
+    for p,q in edges:
+        if p not in graph:
+            graph[p]=[q]
+        elif p in graph:
+            graph[p].append(q)
+        
+        if q not in graph:
+            graph[q]=[p]
+        elif q in graph:
+            graph[q].append(p)
+    print(graph)
+
+
 def run_part2(filename):
     with open(filename, 'r') as file2:
         count=0
@@ -96,7 +113,8 @@ def run_part2(filename):
                 line=line.split()
                 edges.append((int(line[0]),int(line[1])))
             count+=1
-    print(v,e,initial,goal,heuristics, edges)
+    print(edges)
+    check_admissibility(v,e,initial,goal,heuristics,edges)
 
 
 
