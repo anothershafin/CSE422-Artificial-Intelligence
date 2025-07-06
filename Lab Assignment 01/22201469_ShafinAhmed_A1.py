@@ -3,6 +3,8 @@
 
 # Part 01
 import heapq
+from collections import deque
+
 def heuristic(j,k):
     return abs(j[0]-k[0])+abs(j[1]-k[1])
 
@@ -72,5 +74,31 @@ def run_part1(filename):
 #As we were instructed the program must read from input text file
 #But is the assignment folder we were given a pdf file
 #I have created a test file for myself
-#and the program runs for any text input; just need to edit the text file name on the run_part1() function            
+#and the program runs for any text input; just need to edit the text file name on the run_part1() function
+
+
+#Part 02
+
+def run_part2(filename):
+    with open(filename, 'r') as file2:
+        count=0
+        heuristics={}
+        edges=[]
+        for line in file2:
+            if count==0:
+                v,e=map(int,line.split())
+            elif count==1:
+                initial,goal=map(int,line.split())
+            elif 2<=count<(v+2):
+                line=line.split()
+                heuristics[int(line[0])]=int(line[1])
+            else:
+                line=line.split()
+                edges.append((int(line[0]),int(line[1])))
+            count+=1
+    print(v,e,initial,goal,heuristics, edges)
+
+
+
 run_part1('test_input1.txt')
+run_part2('test_input2.txt')
