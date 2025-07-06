@@ -1,3 +1,6 @@
+#22201469 Shafin Ahmed
+#The input and output format from the main question has been followed here, not the input pdf files.
+
 # Part 01
 import heapq
 def heuristic(j,k):
@@ -9,7 +12,41 @@ def a_star(matrix,start,goal):
     parent={}
     g_n={start:0}
     f_n={start: heuristic(start,goal)}
+    heap=[(f_n[start],start)]
     
+    moves=[(-1,0,'U'),(1,0,'D'),(0,-1,'L'),(0,1,'R')]
+    #Here I have implemented the steps of every move so that I do not have to write again while doing a move
+    
+    while heap:
+        popped=heapq.heappop(heap)
+        current=popped[1]
+        if current==goal:
+            sequence=[]
+            while current in parent:
+                current,mv=parent[current]
+                sequence.append(mv)
+            return len(sequence), ''.join(reversed(sequence))
+        
+        visited.add(current)
+        
+        for dx, dy, mv in moves:
+            nextn=(current[0]+dx,current[1]+dy)
+            if 0<=nextn[0]<r and 0<=nextn[1]<c and matrix[nextn[0]][nextn[1]]=='0':
+                if nextn in visited:
+                    continue
+                newg=g_n[current]+1
+                if nextn in g_n:
+                    previous_cost=g_n[nextn]
+                else:
+                    previous_cost=float('inf')
+#Here I am checking if the node had already been explored before and if it has a lesser g(n)
+                if newg<previous_cost:
+                    parent[nextn]=(current,mv)
+                    g_n[nextn]=newg
+                    f_n[nextn]=g_n[nextn]+heuristic(nextn,goal)
+                    heapq.heappush(heap, (f_n[nextn],nextn))
+                    
+    return -1,"-1"
 
 def run_part1(filename):
     with open(filename, 'r') as file1:
@@ -23,7 +60,10 @@ def run_part1(filename):
             elif count==2:
                 c,d=map(int,line.split())
             else:
-                matrix+=[list(line.split())]
+                line=line.strip().replace(" ", "")
+                matrix.append(list(line))
+#As there are two types of matrix given in the main file and input file
+#this apporach handles spaced and non spaced matrices both cases
             count+=1
     cost,seq=a_star(matrix,(a,b),(c,d))
     print(cost)
