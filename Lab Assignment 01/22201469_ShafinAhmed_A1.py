@@ -1,5 +1,6 @@
 #22201469 Shafin Ahmed
 #The input and output format from the main question has been followed here, not the input pdf files.
+#For input file texts, check the bottom of the file
 
 # Part 01
 import heapq
@@ -51,6 +52,7 @@ def a_star(matrix,start,goal):
     return -1,"-1"
 
 def run_part1(filename):
+    print("Part 01")
     with open(filename, 'r') as file1:
         count=0
         matrix=[]
@@ -71,15 +73,23 @@ def run_part1(filename):
     print(cost)
     print(seq)
 
-#As we were instructed the program must read from input text file
-#But is the assignment folder we were given a pdf file
-#I have created a test file for myself
-#and the program runs for any text input; just need to edit the text file name on the run_part1() function
+
 
 
 #Part 02
 
-
+def bfs(graph,initial,goal):
+    visited=set()
+    queue=deque([(initial, 0)])
+    while queue:
+        current,dist=queue.popleft()
+        if current==goal:
+            return dist
+        visited.add(current)
+        for nextnode in graph[current]:
+            if nextnode not in visited:
+                queue.append((nextnode,dist+1))
+    return float('inf')
 
 def check_admissibility(v,e,initial,goal,heuristics,edges):
     graph={}
@@ -93,10 +103,22 @@ def check_admissibility(v,e,initial,goal,heuristics,edges):
             graph[q]=[p]
         elif q in graph:
             graph[q].append(p)
-    print(graph)
+
+    inadmissible=[]
+    for curr in range(1, v+1):
+        actual=bfs(graph,curr,goal)
+        if heuristics[curr]>actual:
+            inadmissible.append(curr)
+
+    if inadmissible:
+        print(0)
+        print("Here nodes", *inadmissible, "are inadmissible.")
+    else:
+        print(1)
 
 
 def run_part2(filename):
+    print("Part 02")
     with open(filename, 'r') as file2:
         count=0
         heuristics={}
@@ -117,6 +139,11 @@ def run_part2(filename):
     check_admissibility(v,e,initial,goal,heuristics,edges)
 
 
-
+#As we were instructed the program must read from input text file
+#But is the assignment folder we were given a pdf file
+#I have created a test file for myself
+#and the program runs for any text input; just need to edit the text file name on the run_part1() and run_part2() function
+#demo input files: https://github.com/anothershafin/CSE422-Artificial-Intelligence/blob/main/Lab%20Assignment%2001/test_input1.txt
+#and: https://github.com/anothershafin/CSE422-Artificial-Intelligence/blob/main/Lab%20Assignment%2001/test_input2.txt 
 run_part1('test_input1.txt')
 run_part2('test_input2.txt')
