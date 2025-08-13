@@ -18,6 +18,11 @@ connections = [
 totalArea=25
 iterations=5
 
+para1=1000
+para2=2
+para3=1
+
+
 def generate_chromosome():
     return [(random.randint(0,totalArea), random.randint(0,totalArea)) for x in range(len(components))]
 
@@ -43,7 +48,6 @@ def calc_overlaps(chromosome):
 def calc_wd(chromosome):
     total=0
     for i,j in connections:
-        print(f"ch:{chromosome[i]} {chromosome[j]}")
         #calculating centers
         a_centerx=chromosome[i][0]+(components[i][1]/2)
         a_centery=chromosome[i][1]+(components[i][2]/2)
@@ -51,13 +55,23 @@ def calc_wd(chromosome):
         b_centery=chromosome[j][1]+(components[j][2]/2)
         
         total+=math.sqrt((a_centerx-b_centerx)**2+(a_centery-b_centery)**2)
-        print(f"wd:{total}")
-    
+
     return total
+
+def calc_ba(chromosome):
+    x_vals=[x for x,y in chromosome]
+    y_vals=[y for x,y in chromosome]
+    max_x=max(x+components[i][1] for i, (x,y) in enumerate(chromosome))
+    min_x=min(x_vals)
+    max_y=max(y+components[i][2] for i, (x,y) in enumerate(chromosome))
+    min_y=min(y_vals)
+    return (max_x-min_x)*(max_y-min_y)
 
 def fitness(chromosome):
     overlap=calc_overlaps(chromosome)
     wiring=calc_wd(chromosome)
+    area=calc_ba(chromosome)
+    print(area)
 
 
 population=[generate_chromosome() for y in range(6)]
