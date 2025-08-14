@@ -84,6 +84,13 @@ def crossover(parent1,parent2):
     child2=parent2[:point]+parent1[point:]
     return child1,child2
 
+#for task 02
+def two_p_crossover(parent1,parent2):
+    points=((random.randint(1, 5)),(random.randint(1, 5)))
+    child1=parent1[:points[0]]+parent2[points[0]:points[1]]+parent1[points[1]:]
+    child2=parent2[:points[0]]+parent1[points[0]:points[1]]+parent2[points[1]:]
+    return child1,child2
+
 def mutate(chromosome,rate=0.07):
     if random.random()<rate:
         r_index=random.randint(0,5)
@@ -110,6 +117,8 @@ for i in range(iterations):
     #select two best fit parents for crossover:
     p1,p2=random.choices(survivors,weights=[f+50000 for f in fit_survivors], k=2)
     c1,c2=crossover(p1,p2)
+    #for task 2, two point crossover, the next line is to be executed
+    # c1,c2=two_p_crossover(p1,p2)
     c1=mutate(c1)
     c2=mutate(c2)
     population=elite_cr+survivors
