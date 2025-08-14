@@ -71,12 +71,16 @@ def fitness(chromosome):
     overlap=calc_overlaps(chromosome)
     wiring=calc_wd(chromosome)
     area=calc_ba(chromosome)
-    print(area)
+    return -(para1*overlap+para2*wiring+para3*area)
 
 
 population=[generate_chromosome() for y in range(6)]
 print(population)
 
 for i in range(iterations):
+    fitValue=[]
     for cr in population:
-        fitValue=fitness(cr)
+        fitValue+=[fitness(cr)]
+    #generating new list like (chromosome, fitness) in descending order
+    new_population=sorted(zip(population,fitValue), key=lambda x:x[1], reverse=True)
+    print(new_population)
