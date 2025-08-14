@@ -74,6 +74,17 @@ def fitness(chromosome):
     area=calc_ba(chromosome)
     return -(para1*overlap+para2*wiring+para3*area)
 
+def crossover(parent1,parent2):
+    point=random.randint(1, 5)
+    child1=parent1[:point]+parent2[point:]
+    child2=parent2[:point]+parent1[point:]
+    return child1,child2
+
+def mutate(chromosome):
+    r_index=random.randint(0,5)
+    chromosome[r_index]=(random.randint(0,totalArea), random.randint(0,totalArea))
+    return chromosome
+
 
 population=[generate_chromosome() for y in range(6)]
 print(population)
@@ -86,12 +97,22 @@ for i in range(iterations):
     new_population=sorted(zip(population,fitValue), key=lambda x:x[1], reverse=True)
     #select one elitge chromosome each iteration
     elite_cr=[new_population[0][0]]
-    print(elite_cr)
-    #select the least fittest:
-    least=new_population[-1][0]
+    #select the least two fittest:
+    least=[new_population[-1][0],new_population[-2][0]]
     #remove the least fittest:
-    population.remove(least)
-    print(population)
+    for z in least:
+        for a in range(len(population)):
+            if population[a]==z:
+                fitValue.pop(a)
+        population.remove(z)
+        #removed two least fit chromosomes as well as their fitness value
+    #select two best fit parents for crossover:
+    p1,p2=random.choices(population,weights=[f+50000 for f in fitValue], k=2)
+    c1,c2=crossover(p1,p2)
+    print(c1,c2)
+    c1=mutate(c1)
+    c2=mutate(c2)
+    print(c1,c2)
 
     
 
