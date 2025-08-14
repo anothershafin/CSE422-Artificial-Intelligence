@@ -1,3 +1,4 @@
+#22201469_Shafin Ahmed
 import random
 import math
 
@@ -19,13 +20,16 @@ totalArea=25
 iterations=15
 ch_count=6
 
-para1=1000
-para2=2
-para3=1
+para1=100
+para2=20
+para3=10
 
 
 def generate_chromosome():
-    return [(random.randint(0,totalArea), random.randint(0,totalArea)) for x in range(len(components))]
+    chromosome=[]
+    for x in range(len(components)):
+        chromosome.append((random.randint(0,(totalArea-components[x][1])), random.randint(0,(totalArea-components[x][2]))))
+    return chromosome
 
 def calc_overlaps(chromosome):
     count = 0
@@ -80,14 +84,15 @@ def crossover(parent1,parent2):
     child2=parent2[:point]+parent1[point:]
     return child1,child2
 
-def mutate(chromosome):
-    r_index=random.randint(0,5)
-    chromosome[r_index]=(random.randint(0,totalArea), random.randint(0,totalArea))
+def mutate(chromosome,rate=0.07):
+    if random.random()<rate:
+        r_index=random.randint(0,5)
+        w,h=components[r_index][1], components[r_index][2]
+        chromosome[r_index]=(random.randint(0,totalArea-w), random.randint(0,totalArea-h))
     return chromosome
 
 
 population=[generate_chromosome() for y in range(6)]
-print(population)
 
 for i in range(iterations):
     fitValue=[]
@@ -97,22 +102,30 @@ for i in range(iterations):
     new_population=sorted(zip(population,fitValue), key=lambda x:x[1], reverse=True)
     #select one elitge chromosome each iteration
     elite_cr=[new_population[0][0]]
-    #select the least two fittest:
-    least=[new_population[-1][0],new_population[-2][0]]
-    #remove the least fittest:
-    for z in least:
-        for a in range(len(population)):
-            if population[a]==z:
-                fitValue.pop(a)
-        population.remove(z)
-        #removed two least fit chromosomes as well as their fitness value
+    #eliminate the least two fittest chr's:
+    survivors=[s for s,t in new_population[1:-2]]
+    fit_survivors=[f for e,f in new_population[1:-2]]
+    # population=survivors
+    # fitValue=fit_survivors
     #select two best fit parents for crossover:
-    p1,p2=random.choices(population,weights=[f+50000 for f in fitValue], k=2)
+    p1,p2=random.choices(survivors,weights=[f+50000 for f in fit_survivors], k=2)
     c1,c2=crossover(p1,p2)
     c1=mutate(c1)
     c2=mutate(c2)
+    population=elite_cr+survivors
     population.append(c1)
     population.append(c2)
+    
+    
+best = max(population, key=fitness)
+print("Best Placement Strategy:", best)
+print("Best total fitness value:", fitness(best))
+print("Total Wiring Length:", calc_wd(best))
+print("Total Bounding area:", calc_ba(best))
+print("Total Overlaps:", calc_overlaps(best))
+
+
+
 
     
 
