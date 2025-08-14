@@ -16,7 +16,8 @@ connections = [
 ]
 
 totalArea=25
-iterations=5
+iterations=1
+ch_count=6
 
 para1=1000
 para2=2
@@ -83,4 +84,15 @@ for i in range(iterations):
         fitValue+=[fitness(cr)]
     #generating new list like (chromosome, fitness) in descending order
     new_population=sorted(zip(population,fitValue), key=lambda x:x[1], reverse=True)
-    print(new_population)
+    #select one elitge chromosome each iteration
+    elite_cr=[new_population[0][0]]
+    print(elite_cr)
+    #select the least fittest:
+    least=new_population[-1][0]
+    #remove the least fittest:
+    population.remove(least)
+    print(population)
+
+    
+
+        
