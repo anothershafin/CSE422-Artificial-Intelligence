@@ -16,7 +16,7 @@ connections = [
 ]
 
 totalArea=25
-iterations=1
+iterations=15
 ch_count=6
 
 para1=1000
@@ -109,10 +109,10 @@ for i in range(iterations):
     #select two best fit parents for crossover:
     p1,p2=random.choices(population,weights=[f+50000 for f in fitValue], k=2)
     c1,c2=crossover(p1,p2)
-    print(c1,c2)
     c1=mutate(c1)
     c2=mutate(c2)
-    print(c1,c2)
+    population.append(c1)
+    population.append(c2)
 
     
 
