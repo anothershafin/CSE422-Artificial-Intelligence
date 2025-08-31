@@ -13,4 +13,5 @@ CSE422 introduces the foundational concepts, techniques, and algorithms in Artif
 - Introduction to probabilistic and logic models so the students will be able to use these models in various decision-making problems.
 - Introduction to the basic concept of machine learning.
 
-## 🗂️ Repository Structure
+## 🗂️ Repository Structure:
+To be udpated

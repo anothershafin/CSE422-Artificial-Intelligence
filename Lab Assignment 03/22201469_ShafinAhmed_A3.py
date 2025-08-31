@@ -116,3 +116,4 @@ else:
 print("With special nucleotide")
 print("Best gene sequence generated:",d)
 print("Utility score:",round(c,2))
+print("Task Finished")
